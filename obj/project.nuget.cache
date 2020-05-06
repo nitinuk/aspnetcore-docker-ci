@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "LGu/0hohRHbt8doXQ0Ks4f7ymqunp1SAt8RdRvRt8cwYvoy1IYRu8OfW49P0bf4DvSyS3Vuuk/X7LvgS5WPk9Q==",
+  "dgSpecHash": "lezRWpsM8PmvvgyHtx3NtBQRecyIIdd7vXVzQGA2h4D/Y7KrUyAihBmy2ehsVH1WDZGbLc96OX98BGp7YV1/jA==",
   "success": true,
-  "projectFilePath": "/app/SampleASPCoreApp.csproj",
+  "projectFilePath": "/Users/hkatkam001/Documents/Workspace/SampleASPCoreApp/SampleASPCoreApp.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }
