@@ -1,0 +1,42 @@
+#This is multi stage docker file to run mvc core app inside windows container
+
+#**********Step 1 Build the src code and publish
+#Getting base image from ms and tagging it as publish
+
+# https://hub.docker.com/_/microsoft-dotnet-core
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
+
+# setting working dir as publish folder
+
+WORKDIR /source
+
+#copy all project file from current dir to publish folder on container
+
+# copy csproj and restore as distinct layers
+#COPY *.sln .
+COPY *.csproj .
+
+# run dotner restore to get nuget packages
+RUN dotnet restore
+
+#copy source code to container from host folder 
+
+#copy everything else and build app
+COPY ./ ./
+WORKDIR /source
+# run dotnet publish to create release version 
+RUN dotnet publish -c release -o /app
+# --no-restore
+
+
+#********* Step 2  copy the published code and run the app in container
+
+# final stage/runtime container image
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
+LABEL author="Hari Katkam"
+
+ENV ASPNETCORE_URLS=http://+:5000
+
+WORKDIR /app
+COPY --from=build /app ./
+ENTRYPOINT ["dotnet", "SamplePostgresSql.dll"]
