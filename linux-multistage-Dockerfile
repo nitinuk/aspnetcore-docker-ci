@@ -1,0 +1,36 @@
+#This is multi stage docker file to run mvc core app inside alpine linux 
+ARG VERSION=3.1-alpine3.10
+FROM mcr.microsoft.com/dotnet/core/sdk:$VERSION AS build-env
+WORKDIR /app
+#ADD /*.csproj .
+COPY *.csproj .
+RUN dotnet restore
+#ADD /src .
+#RUN dotnet publish -c release -o /app
+COPY ./ ./
+#WORKDIR /app
+
+# pre-
+#FROM dockersamples/aspnet-monitoring-exporter:4.7.2 AS exporter
+
+#WORKDIR C:\aspnet-exporter
+#COPY --from=exporter C:\aspnet-exporter .
+#ENV COLLECTOR_CONFIG_PATH="w3svc-collectors.json"
+
+#
+
+RUN dotnet publish -c Release  -o ./output
+
+FROM mcr.microsoft.com/dotnet/core/aspnet:$VERSION
+#RUN adduser \
+ # --disabled-password \
+ # --home /app \
+ # --gecos '' app \
+ # && chown -R app /app
+#USER app
+WORKDIR /app
+COPY --from=build-env /app/output .
+ENV DOTNET_RUNNING_IN_CONTAINER=true \
+  ASPNETCORE_URLS=http://+:5000
+EXPOSE 5000
+ENTRYPOINT ["dotnet", "SamplePostgresSql.dll"]
